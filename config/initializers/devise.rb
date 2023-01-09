@@ -310,9 +310,9 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
 end
 
-Devise.add_module(:custom_authentication, {
+Devise.add_module(:custom_authenticable, {
   strategy: true,
   controller: :sessions,
-  model: 'devise/models/custom_authentication',
-  route: session
+  model: 'devise/models/custom_authenticable',
+  route: :session
 })

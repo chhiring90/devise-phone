@@ -1,12 +1,10 @@
-require Root.join('lib/devise/strategies/custom_authentcation')
-
 module Devise
   module Models
-    module CustomAuthentication
+    module CustomAuthenticable
       extend ActiveSupport::Concern
 
-      included do
-        attr_accessor :custom_user_group
+      include do
+        tr_accessor :custom_user_group
       end
 
       class_methods do
@@ -16,9 +14,8 @@ module Devise
         # If a user needs to sign up first,
         #   with Registerable, merely look up the record in your database
         #   instead of creating a new one
-
         def find_or_create_with_authentication_profile(profile)
-          resource = where(username: profile.user_id).find_or_create({ email: profile.e_mail_adress,
+          resource = where(username: profile.user_id).find_or_create({ email: profile.email_address,
                                                                        first_name: profile.first_name, last_name: profile.last_name })
           resource.custom_user_group = profile.custom_user_group
           resource
@@ -46,12 +43,12 @@ module Devise
 
         # Searilize any data you want into the session. The Resource Primary Key or other Unique Identifier
         # is recommended
-        # 
+        #
         # The items placed into this array should be Serializable, e.g. numbers, strings, and Hashes
-        # Do not place entire Ruby objects or Arrays of objects into the session 
+        # Do not place entire Ruby objects or Arrays of objects into the session
 
         def serialize_into_session(resource)
-            [resource.id, resource.custom_user_group]
+          [resource.id, resource.custom_user_group]
         end
       end
     end
